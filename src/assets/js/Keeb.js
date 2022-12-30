@@ -22,7 +22,10 @@ class KeebRow {
   constructor(x_start) {
     this.x_start = x_start;
   }
-
+  /**
+   * Creates a new key and adds it to the end of the row
+   * @param {string} value Character displayed on the key
+   */
   addKey(value) {
     this.keys.push(new KeebKey(value));
   }
