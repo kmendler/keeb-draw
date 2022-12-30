@@ -1,4 +1,4 @@
-//** Represents a keyboard */
+/** Represents a keyboard */
 class Keeb {
   rows = [];
   /**
@@ -34,7 +34,6 @@ class KeebRow {
 /** Represents a key of a keyboard */
 class KeebKey {
   /**
-   *
    * @param {string} value Character displayed on the key
    */
   constructor(value) {
