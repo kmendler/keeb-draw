@@ -11,6 +11,39 @@ class Keeb {
     this.key_width = key_width;
     this.space_width = space_width;
   }
+
+  /**
+   * Attempts to locate the key on the keyboard and provide its x, y coordinates if found
+   * @param {string} value Character on the key
+   * @returns {undefined|Point} x, y coordinates of the key or undefined if not found
+   */
+  getKeyPoint(value) {
+    // Locate the key
+    let x_pos, y_pos;
+    let keyFound = false;
+    let searchVal = value.toLowerCase();
+    searchLoop: for (let row_i = 0; row_i < this.rows.length; row_i++) {
+      let currentKeys = this.rows[row_i].keys;
+      for (let key_i = 0; key_i < currentKeys.length; key_i++) {
+        if (currentKeys[key_i].value === searchVal) {
+          x_pos = key_i;
+          y_pos = row_i;
+          keyFound = true;
+          break searchLoop;
+        }
+      }
+    }
+
+    if (!keyFound) {
+      return;
+    }
+
+    // Convert to x, y
+    let x, y;
+    x = this.rows[y_pos].x_start + (this.key_width + this.space_width) * x_pos;
+    y = (this.key_width + this.space_width) * y_pos;
+    return new KeebPoint(x, y);
+  }
 }
 
 /** Represents a row of a keyboard */
@@ -38,6 +71,18 @@ class KeebKey {
    */
   constructor(value) {
     this.value = value;
+  }
+}
+
+/** Represents a 2-D point on a keyboard */
+class KeebPoint {
+  /**
+   *  @property {number} x The X-coordinate.
+   *  @property {number} y The Y-coordinate.
+   */
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
   }
 }
 
@@ -70,3 +115,6 @@ class QwertyKeeb extends Keeb {
 // Main
 const qwertyKeeb = new QwertyKeeb();
 console.log(qwertyKeeb);
+console.log(qwertyKeeb.getKeyPoint("1"));
+console.log(qwertyKeeb.getKeyPoint("l"));
+console.log(qwertyKeeb.getKeyPoint(";"));
