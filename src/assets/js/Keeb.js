@@ -118,9 +118,5 @@ class QwertyKeeb extends Keeb {
   }
 }
 
-// Main
-const qwertyKeeb = new QwertyKeeb();
-console.log(qwertyKeeb);
-console.log(qwertyKeeb.getKeyPoint("1"));
-console.log(qwertyKeeb.getKeyPoint("l"));
-console.log(qwertyKeeb.getKeyPoint(";"));
+
+export { QwertyKeeb };
