@@ -1,15 +1,15 @@
 /** Represents a keyboard */
 class Keeb {
-  rows = [];
   /**
    * @param {string} name Name of the keyboard
-   * @param {number} key_width Width of a basic key
-   * @param {number} space_width Width of the spaces between keys
+   * @param {number} keyWidth Width of a basic key
+   * @param {number} spaceWidth Width of the spaces between keys
    */
-  constructor(name, key_width, space_width) {
+  constructor(name, keyWidth, spaceWidth) {
     this.name = name;
-    this.key_width = key_width;
-    this.space_width = space_width;
+    this.keyWidth = keyWidth;
+    this.spaceWidth = spaceWidth;
+    this.rows = [];
   }
 
   /**
@@ -19,18 +19,22 @@ class Keeb {
    */
   getKeyPoint(value) {
     // Locate the key
-    let x_pos, y_pos;
     let keyFound = false;
-    let searchVal = value.toLowerCase();
-    searchLoop: for (let row_i = 0; row_i < this.rows.length; row_i++) {
-      let currentKeys = this.rows[row_i].keys;
-      for (let key_i = 0; key_i < currentKeys.length; key_i++) {
-        if (currentKeys[key_i].value === searchVal) {
-          x_pos = key_i;
-          y_pos = row_i;
-          keyFound = true;
-          break searchLoop;
-        }
+    let xPos, yPos;
+    const searchVal = value.toLowerCase();
+
+    for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
+      const currentKeys = this.rows[rowIndex].keys;
+      for (let keyIndex = 0; keyIndex < currentKeys.length; keyIndex++) {
+          if (currentKeys[keyIndex].value === searchVal) {
+              xPos = keyIndex;
+              yPos = rowIndex;
+              keyFound = true;
+              break;
+          }
+      }      
+      if (keyFound) {
+          break;
       }
     }
 
@@ -40,20 +44,20 @@ class Keeb {
 
     // Convert to x, y
     let x, y;
-    x = this.rows[y_pos].x_start + (this.key_width + this.space_width) * x_pos;
-    y = (this.key_width + this.space_width) * y_pos;
+    x = this.rows[yPos].xStart + (this.keyWidth + this.spaceWidth) * xPos;
+    y = (this.keyWidth + this.spaceWidth) * yPos;
     return new KeebPoint(x, y);
   }
 }
 
 /** Represents a row of a keyboard */
 class KeebRow {
-  keys = [];
   /**
-   * @param {number} x_start X co-ordinate of the first letter or number key in the row
+   * @param {number} xStart X co-ordinate of the first letter or number key in the row
    */
-  constructor(x_start) {
-    this.x_start = x_start;
+  constructor(xStart) {
+    this.xStart = xStart;
+    this.keys = [];
   }
   /**
    * Creates a new key and adds it to the end of the row
@@ -97,7 +101,7 @@ class QwertyKeeb extends Keeb {
   }
 
   #buildKeeb() {
-    const x_starts = [this.key_width + this.space_width, 27, 38, 43];
+    const xStarts = [this.keyWidth + this.spaceWidth, 27, 38, 43];
     const keebVals = [
       ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
       ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
@@ -105,8 +109,10 @@ class QwertyKeeb extends Keeb {
       ["z", "x", "c", "v", "b", "n", "m"],
     ];
     for (let i = 0; i < keebVals.length; i++) {
-      let newRow = new KeebRow(x_starts[i]);
-      keebVals[i].forEach((val) => newRow.addKey(val));
+      let newRow = new KeebRow(xStarts[i]);
+      keebVals[i].forEach((val) => {
+        newRow.addKey(val);
+      });
       this.rows.push(newRow);
     }
   }
